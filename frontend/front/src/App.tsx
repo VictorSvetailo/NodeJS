@@ -35,8 +35,10 @@ function App() {
             })
     }, [])
 
+    const [newName, setNewName] = useState('')
+
     const addNewUser = () =>{
-        axios.post('http://localhost:4000/users')
+        axios.post('http://localhost:4000/users', {name: newName})
             .then((res) => {
                 console.log(res.data)
                 getUsers()
@@ -46,7 +48,13 @@ function App() {
 
     const user = users.map((u: any) => {
         return (
-            <div key={u.id}><span>{u.id}. </span> {u.name}</div>
+            <div key={u.id}>
+                <span>{u.name}.</span>
+
+                {u.title}
+                <div>{u.body}</div>
+                -
+            </div>
         )
 
     })
@@ -66,6 +74,7 @@ function App() {
     return (
         <div className="App">
             <h1>Start Server</h1>
+            <input type="text" value={newName} onChange={(e)=>{setNewName(e.currentTarget.value)}}/>
             <button onClick={addNewUser}>Add new user</button>
 
             {user}

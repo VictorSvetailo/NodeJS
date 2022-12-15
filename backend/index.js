@@ -2,8 +2,15 @@
 
 
 let http = require('http');
-let {getUsers, addUser} = require('./repositories/users-repository');
-let {getPosts} = require('./repositories/posts-repository');
+
+let {getPosts} = require('./posts-repository');
+let {usersController} = require('./users-controller');
+
+
+process.on('uncaughtRejection', function (reason, p) {
+    console.log(reason, p);
+    // console.log("Node NOT Exiting...");
+});
 
 
 let cors = (request, response) => {
@@ -23,34 +30,25 @@ let cors = (request, response) => {
     return false
 }
 
-
 const server = http.createServer((request, response)=>{
     if (cors(request, response)) return
-    console.log('server add user')
 
-
-    console.log(request.url)
     switch (request.url) {
         case "/users":
-            if (request.method === "POST"){
-                addUser('Anton')
-                response.write(JSON.stringify({success: true}))
-            } else{
-                response.write(JSON.stringify(getUsers()))
-            }
+            usersController(request, response)
             break;
         case "/posts":
-            response.write(JSON.stringify(getPosts()))
+            response.write(JSON.stringify(getPosts(request, response)))
+            response.end()
             break;
         default:
             response.write(`PAGE NOT FOUND`)
     }
-    response.end()
-
+    // response.end()
 })
 
 server.listen(4000)
-    console.log(`server is listening on ${http}`)
+    // console.log(`server is listening on ${http}`)
 
 
 
