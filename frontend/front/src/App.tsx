@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {useDispatch} from 'react-redux';
 import axios from 'axios';
 import {Simulate} from 'react-dom/test-utils';
 import input = Simulate.input;
@@ -9,7 +8,7 @@ function App() {
     // const dispatch = useDispatch()
 
     const [users, setUsers] = useState<any>([])
-    const [tasks, setTasks] = useState<any>([])
+    const [posts, setPosts] = useState<any>([])
     console.log(users)
 
     const getUsers = () =>{
@@ -31,7 +30,7 @@ function App() {
         axios.get('http://localhost:4000/posts')
             .then((res) => {
                 console.log(res.data)
-                setTasks(res.data)
+                setPosts(res.data)
             })
     }, [])
 
@@ -45,25 +44,21 @@ function App() {
             })
     }
 
-
+    //
     const user = users.map((u: any) => {
         return (
             <div key={u.id}>
                 <span>{u.name}.</span>
-
-                {u.title}
-                <div>{u.body}</div>
-                -
             </div>
         )
 
     })
 
-    const task = tasks.map((u: any) => {
+    const task = posts.map((u: any) => {
         return (
             <div key={u.id}><span>{u.userId}.
             </span> {u.title}
-                <input checked={u.completed} type="checkbox"/>
+                {/*<input checked={u.completed} type="checkbox"/>*/}
             </div>
         )
 
